@@ -1,5 +1,5 @@
 
-interface User {
+interface TUser {
     userId: string;
     username: string;
     password: string;
@@ -17,4 +17,4 @@ interface User {
         country: string
     }
 }
-export { User }
+export { TUser }
