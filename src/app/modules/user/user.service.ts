@@ -3,9 +3,19 @@ import { TUser } from "./user.interface";
 
 
 
-const createUser = async (userData: TUser): Promise<TUser> => {
+const createUserIntoDb = async (userData: TUser) => {
 
-    const result = await User.create(userData)
+    // instance method
+    const user = new User(userData)/* create an instance */
+    if (await user.isUserExist(userData.userId)) {
+        throw new Error("User already exists!")
+    }
+    const result = user.save() /* built in instance method */
+    return result
+}
+
+const getAllUserFromDb = async () => {
+    const result = await User.find()
     return result
 }
 
@@ -13,5 +23,6 @@ const createUser = async (userData: TUser): Promise<TUser> => {
 
 
 export const userServices = {
-    createUser,
+    createUserIntoDb,
+    getAllUserFromDb,
 }

@@ -10,7 +10,7 @@ const createUser = async (req: Request, res: Response) => {
         // console.log(userData);
         // data validation using zod package
         const parseDataByZod = userSchema.parse(userData)
-        const result = await userServices.createUser(parseDataByZod)
+        const result = await userServices.createUserIntoDb(parseDataByZod)
         // console.log(result);
         res.status(200).json({
             success: true,
@@ -28,6 +28,25 @@ const createUser = async (req: Request, res: Response) => {
     }
 }
 
+const getAllUser = async (req: Request, res: Response) => {
+    try {
+        const result = await userServices.getAllUserFromDb()
+        res.status(200).json({
+            success: true,
+            message: "Users fetched successfully!",
+            data: result
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message || "Something went wrong!",
+            data: error
+        })
+    }
+}
+
 export const userController = {
     createUser,
+    getAllUser,
 }

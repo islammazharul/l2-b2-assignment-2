@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { TUser } from "./user/user.interface";
+import { TUser, UserModel } from "./user/user.interface";
 
 
 // const userNameSchema = new Schema<TUserName>({
@@ -40,7 +40,7 @@ import { TUser } from "./user/user.interface";
 //     }
 // })
 
-const userSchema = new Schema<TUser>({
+const userSchema = new Schema<TUser, UserModel>({
     userId: {
         type: Number,
         required: [true, "User ID must be required"],
@@ -107,6 +107,12 @@ const userSchema = new Schema<TUser>({
     ]
 })
 
-const User = model<TUser>("User", userSchema)
+// creating a custom method for existing user
+userSchema.methods.isUserExist = async function (userId: number) {
+    const existingUser = await User.findOne({ userId })
+    return existingUser
+}
+
+const User = model<TUser, UserModel>("User", userSchema)
 
 export default User;

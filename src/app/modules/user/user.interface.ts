@@ -1,3 +1,4 @@
+import { Model } from "mongoose";
 
 type TUserName = {
     firstName: string;
@@ -28,4 +29,13 @@ type TUser = {
     address: TUserAddress;
     orders: TOrderProduct[]
 }
-export { TUser, TUserName, TUserAddress, TOrderProduct }
+
+// creating method for existing user
+export type UserMethods = {
+    // eslint-disable-next-line no-unused-vars
+    isUserExist(userId: number): Promise<TUser | null>
+}
+
+type UserModel = Model<TUser, Record<string, never>, UserMethods>;
+
+export { TUser, TUserName, TUserAddress, TOrderProduct, UserModel }
