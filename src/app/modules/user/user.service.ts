@@ -20,8 +20,21 @@ const getAllUserFromDb = async () => {
 }
 
 const getSingleUserFromDb = async (id: string): Promise<TUser | null> => {
-    const result = await User.findById(id)
+    const result = await User.findOne({ _id: id })
 
+    return result
+}
+
+const updateUserInDb = async (id: string, userData: TUser): Promise<TUser | null> => {
+    const result = await User.findByIdAndUpdate({ _id: id }, userData, {
+        new: true,
+        runValidators: true
+    })
+    return result
+}
+
+const deleteUserFromDb = async (id: string): Promise<TUser | null> => {
+    const result = await User.findOneAndDelete({ _id: id })
     return result
 }
 
@@ -30,4 +43,6 @@ export const userServices = {
     createUserIntoDb,
     getAllUserFromDb,
     getSingleUserFromDb,
+    updateUserInDb,
+    deleteUserFromDb,
 }
