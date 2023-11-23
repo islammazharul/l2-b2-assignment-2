@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { userServices } from "./user.service";
 import userSchema from "./user.validation";
+import { number } from "zod";
 
 
 
@@ -46,7 +47,26 @@ const getAllUser = async (req: Request, res: Response) => {
     }
 }
 
+const getSingleUser = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params
+        const result = await userServices.getSingleUserFromDb(userId)
+        res.status(200).json({
+            success: true,
+            message: "Users fetched successfully!",
+            data: result
+        })
+    } catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message || "Something went wrong!",
+            data: error
+        })
+    }
+}
+
 export const userController = {
     createUser,
     getAllUser,
+    getSingleUser
 }

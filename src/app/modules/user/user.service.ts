@@ -19,10 +19,15 @@ const getAllUserFromDb = async () => {
     return result
 }
 
+const getSingleUserFromDb = async (id: string): Promise<TUser | null> => {
+    const result = await User.findById(id)
 
+    return result
+}
 
 
 export const userServices = {
     createUserIntoDb,
     getAllUserFromDb,
+    getSingleUserFromDb,
 }
