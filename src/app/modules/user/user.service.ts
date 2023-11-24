@@ -47,25 +47,10 @@ const deleteUserFromDb = async (id: number): Promise<TUser | null> => {
     return result
 }
 
-const addOrderCollectionInDb = async (id: number, userData: TUser /* productName: string, price: number, quantity: number */): Promise<TUser | null> => {
+const addOrderCollectionInDb = async (id: number, userData: TUser) => {
     const result = await User.findOneAndUpdate(
-        { userId: id },
-        {
-            $set: userData
-
-            /* orders: {
-                $cond: {
-                    if: { $isArray: "$orders" },
-                    then: {
-                        $concatArray: ["$orders", [userData]]
-                    },
-                    else: [userData]
-                }
-            } */
-
-        },
-        { new: true, runValidators: true }
-
+        { $match: { userId: id } },
+        { $push: { "$user.orders": userData } }
     )
     return result
 }
@@ -124,6 +109,11 @@ const totalPriceOfOrder = async (id: number) => {
                         $multiply: ["$orders.price", "$orders.quantity"]
                     }
                 }
+            }
+        },
+        {
+            $project: {
+                totalPrice: { $round: ["$totalPrice", 2] }
             }
         }
     ])

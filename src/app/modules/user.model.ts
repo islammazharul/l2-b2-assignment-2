@@ -1,5 +1,7 @@
 import { Schema, model } from "mongoose";
 import { TUser, UserModel, TUserName, TUserAddress, TOrderProduct } from "./user/user.interface";
+import config from "../config";
+import bcrypt from 'bcrypt'
 
 
 const userNameSchema = new Schema<TUserName>({
@@ -74,6 +76,21 @@ const userSchema = new Schema<TUser, UserModel>({
     hobbies: [String],
     address: userAddressSchema,
     orders: [orderSchema]
+})
+
+userSchema.pre("save", async function (next) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const user = this
+    user.password = await bcrypt.hash(
+        user.password,
+        Number(config.bcrypt_salt_round))
+    next()
+})
+
+// post save middleware/hook
+userSchema.post("save", function (doc, next) {
+    doc.password = '';
+    next()
 })
 
 // creating a custom method for existing user

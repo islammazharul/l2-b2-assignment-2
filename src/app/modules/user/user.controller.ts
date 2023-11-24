@@ -90,9 +90,9 @@ const addOrderCollection = async (req: Request, res: Response) => {
         const userData = req.body;
         const userId = parseInt(req.params.userId)
 
-        // console.log(userData, userId);
+        console.log(userData, userId);
         const result = await userServices.updateUserInDb(userId, userData)
-        // console.log(result);
+        console.log(result);
         res.status(200).json({
             success: true,
             message: "User updated successfully!",
