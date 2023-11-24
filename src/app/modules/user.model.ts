@@ -1,44 +1,47 @@
 import { Schema, model } from "mongoose";
-import { TUser, UserModel } from "./user/user.interface";
+import { TUser, UserModel, TUserName, TUserAddress, TOrderProduct } from "./user/user.interface";
 
 
-// const userNameSchema = new Schema<TUserName>({
-//     firstName: {
-//         type: String,
-//         required: [true, "First name must be required"],
-//     },
-//     lastName: {
-//         type: String,
-//         required: [true, "Last name must be required"],
-//     }
-// })
+const userNameSchema = new Schema<TUserName>({
+    firstName: {
+        type: String,
+        required: [true, "First name must be required"],
+    },
+    lastName: {
+        type: String,
+        required: [true, "Last name must be required"],
+    },
+    // _id: false
+})
 
-// const userAddressSchema = new Schema<TUserAddress>({
-//     street: {
-//         type: String,
-//         required: [true, "street must be required"],
-//     },
-//     city: {
-//         type: String,
-//         required: [true, "city must be required"],
-//     },
-//     country: {
-//         type: String,
-//         required: [true, "country must be required"],
-//     }
-// })
+const userAddressSchema = new Schema<TUserAddress>({
+    street: {
+        type: String,
+        required: [true, "street must be required"],
+    },
+    city: {
+        type: String,
+        required: [true, "city must be required"],
+    },
+    country: {
+        type: String,
+        required: [true, "country must be required"],
+    },
+    // _id: false
+})
 
-// const orderSchema = new Schema<TOrderProduct>({
-//     productName: {
-//         type: String
-//     },
-//     price: {
-//         type: Number
-//     },
-//     quantity: {
-//         type: Number
-//     }
-// })
+const orderSchema = new Schema<TOrderProduct>({
+    productName: {
+        type: String
+    },
+    price: {
+        type: Number
+    },
+    quantity: {
+        type: Number
+    },
+    // _id: false
+})
 
 const userSchema = new Schema<TUser, UserModel>({
     userId: {
@@ -55,16 +58,7 @@ const userSchema = new Schema<TUser, UserModel>({
         type: String,
         required: [true, "User password must be required"],
     },
-    fullName: {
-        firstName: {
-            type: String,
-            required: [true, "First name must be required"],
-        },
-        lastName: {
-            type: String,
-            required: [true, "Last name must be required"],
-        }
-    },
+    fullName: userNameSchema,
     age: {
         type: Number,
         required: [true, "User age must be required"],
@@ -78,33 +72,8 @@ const userSchema = new Schema<TUser, UserModel>({
         default: true
     },
     hobbies: [String],
-    address: {
-        street: {
-            type: String,
-            required: [true, "street must be required"],
-        },
-        city: {
-            type: String,
-            required: [true, "city must be required"],
-        },
-        country: {
-            type: String,
-            required: [true, "country must be required"],
-        }
-    },
-    orders: [
-        {
-            productName: {
-                type: String
-            },
-            price: {
-                type: Number
-            },
-            quantity: {
-                type: Number
-            }
-        }
-    ]
+    address: userAddressSchema,
+    orders: [orderSchema]
 })
 
 // creating a custom method for existing user

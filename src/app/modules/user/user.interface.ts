@@ -1,23 +1,26 @@
 import { Model } from "mongoose";
 
-type TUserName = {
+interface TUserName {
     firstName: string;
     lastName: string;
+    // _id: boolean
 }
 
-type TUserAddress = {
+interface TUserAddress {
     street: string;
     city: string;
     country: string
+    // _id: boolean
 }
 
-type TOrderProduct = {
+interface TOrderProduct {
     productName: string;
     price: number;
-    quantity: number
+    quantity: number;
+    // _id: boolean
 }
 
-type TUser = {
+interface TUser {
     userId: number;
     username: string;
     password: string;
@@ -27,7 +30,7 @@ type TUser = {
     isActive: boolean;
     hobbies: string[];
     address: TUserAddress;
-    orders: TOrderProduct[]
+    orders?: TOrderProduct[] | undefined;
 }
 
 // creating method for existing user

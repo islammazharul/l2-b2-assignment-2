@@ -11,6 +11,10 @@ router.get("/:userId", userController.getSingleUser)
 
 router.put("/:userId", userController.updateUser)
 
+router.put("/:userId/orders", userController.addOrderCollection)
+
+router.get("/:userId/orders", userController.totalPrice)
+
 router.delete("/:userId", userController.deleteUser)
 
 

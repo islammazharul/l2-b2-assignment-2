@@ -4,6 +4,7 @@ import userSchema from "./user.validation";
 
 
 
+
 const createUser = async (req: Request, res: Response) => {
     try {
         const { user: userData } = req.body;
@@ -48,8 +49,8 @@ const getAllUser = async (req: Request, res: Response) => {
 
 const getSingleUser = async (req: Request, res: Response) => {
     try {
-        const { userId } = req.params
-        const result = await userServices.getSingleUserFromDb(userId)
+        const id = parseInt(req.params.userId)
+        const result = await userServices.getSingleUserFromDb(id)
         res.status(200).json({
             success: true,
             message: "Users fetched successfully!",
@@ -67,8 +68,28 @@ const getSingleUser = async (req: Request, res: Response) => {
 
 const updateUser = async (req: Request, res: Response) => {
     try {
+        const updateData = req.body;
+        const id = parseInt(req.params.userId)
+        const result = await userServices.updateUserInDb(id, updateData)
+        res.status(200).json({
+            success: true,
+            message: "User updated successfully!",
+            data: result
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message || "Something went wrong!",
+            data: error
+        })
+    }
+}
+const addOrderCollection = async (req: Request, res: Response) => {
+    try {
         const userData = req.body;
-        const { userId } = req.params;
+        const userId = parseInt(req.params.userId)
+
         // console.log(userData, userId);
         const result = await userServices.updateUserInDb(userId, userData)
         // console.log(result);
@@ -89,11 +110,29 @@ const updateUser = async (req: Request, res: Response) => {
 
 const deleteUser = async (req: Request, res: Response) => {
     try {
-        const { userId } = req.params;
+        const userId = parseInt(req.params.userId)
         const result = await userServices.deleteUserFromDb(userId)
         res.status(200).json({
             success: true,
             message: "User deleted successfully!",
+            data: result
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message || "Something went wrong!",
+            data: error
+        })
+    }
+}
+const totalPrice = async (req: Request, res: Response) => {
+    try {
+        const userId = parseInt(req.params.userId)
+        const result = await userServices.totalPriceOfOrder(userId)
+        res.status(200).json({
+            success: true,
+            message: "Total price calculated successfully!",
             data: result
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -113,4 +152,6 @@ export const userController = {
     getSingleUser,
     updateUser,
     deleteUser,
+    addOrderCollection,
+    totalPrice
 }
