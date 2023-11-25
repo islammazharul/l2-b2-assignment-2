@@ -26,45 +26,80 @@ const getAllUserFromDb = async () => {
     return result;
 };
 
-const getSingleUserFromDb = async (id: number): Promise<TUser | null> => {
-    const result = await User.findOne({ userId: id }).select('-password').exec();
-    if (!result) {
+const getSingleUserFromDb = async (id: number) => {
+    const userID = id;
+    const user = new User({ userId: id })
+    const doesExist = await user.isUserExist(userID)
+    if (!doesExist) {
         throw new Error('User does not exist!');
+    } else {
+        const result = await User.aggregate([
+            { $match: { userId: id } },
+            {
+                $project: {
+                    userId: 1,
+                    username: 1,
+                    fullName: 1,
+                    age: 1,
+                    email: 1,
+                    isActive: 1,
+                    hobbies: 1,
+                    address: 1
+                }
+            }
+        ])
+        return result;
     }
 
-    return result;
 };
 
 const updateUserInDb = async (
     id: number,
     updateData: TUser,
 ): Promise<TUser | null> => {
-    const result = await User.findOneAndUpdate({ userId: id }, updateData, {
-        new: true,
-        runValidators: true,
-    });
-    return result;
-};
-
-const deleteUserFromDb = async (id: number, userData: TUser) => {
-    const user = new User(userData);
-    if (await user.isUserExist(userData.userId)) {
-
-        const result = await User.findOneAndDelete({ userId: id });
+    const userID = id;
+    const user = new User({ userId: id })
+    const doesExist = await user.isUserExist(userID)
+    if (!doesExist) {
+        throw new Error('User does not exist!');
+    } else {
+        const result = await User.findOneAndUpdate({ userId: id }, updateData, {
+            new: true,
+            runValidators: true,
+        });
         return result;
     }
-    else {
-        throw new Error("user nai")
+
+};
+
+const deleteUserFromDb = async (id: number) => {
+    const user = new User({ userId: id });
+    const userID = id
+
+    const doesExist = await user.isUserExist(userID);
+    if (!doesExist) {
+        throw new Error('User does not exist!');
+    } else {
+        const result = await User.findOneAndDelete({ userId: id });
+        return result;
     }
 };
 
 const addOrderCollectionInDb = async (id: number, userData: TUser) => {
-    const result = await User.updateOne(
-        { userId: id },
-        { $addToSet: { orders: { $each: [userData] } } },
-        { new: true, upsert: true }
-    );
-    return result;
+    const userID = id;
+    const user = new User({ userId: id });
+
+    const doesExist = await user.isUserExist(userID)
+    if (!doesExist) {
+        throw new Error('User does not exist!');
+    } else {
+        const result = await User.findOneAndUpdate(
+            { userId: id },
+            { $push: { orders: userData } },
+            { new: true, upsert: true }
+        );
+        return result;
+    }
 };
 
 // const addOrderCollectionInDb = async (
@@ -106,19 +141,29 @@ const addOrderCollectionInDb = async (id: number, userData: TUser) => {
 // };
 
 const singleUserOrderDb = async (id: number) => {
-    const result = await User.aggregate([
-        { $match: { userId: id } },
-        {
-            $project: {
-                orders: 1,
+    const userID = id;
+    const user = new User({ userId: id });
+    const doesExist = await user.isUserExist(userID)
+    if (!doesExist) {
+        throw new Error('User does not exist!');
+    } else {
+        const result = await User.aggregate([
+            { $match: { userId: id } },
+            {
+                $project: {
+                    orders: 1,
+                },
             },
-        },
-    ]);
-    return result;
+        ]);
+        return result;
+    }
 };
 
 const totalPriceOfOrder = async (id: number) => {
-    try {
+    const userID = id;
+    const user = new User({ userId: id });
+    const doesExist = await user.isUserExist(userID)
+    if (doesExist) {
         const result = await User.aggregate([
             { $match: { userId: id } },
             {
@@ -150,7 +195,7 @@ const totalPriceOfOrder = async (id: number) => {
             };
             return response;
         } else {
-            const response = {
+            const errorResponse = {
                 success: false,
                 message: 'User not found',
                 error: {
@@ -158,12 +203,11 @@ const totalPriceOfOrder = async (id: number) => {
                     description: 'User not found!',
                 },
             };
-            return response;
+            return errorResponse;
         }
-    } catch (error) {
-        return error;
     }
-};
+}
+
 
 export const userServices = {
     createUserIntoDb,

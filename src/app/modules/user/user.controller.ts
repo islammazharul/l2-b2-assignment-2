@@ -105,9 +105,8 @@ const addOrderCollection = async (req: Request, res: Response) => {
 
 const deleteUser = async (req: Request, res: Response) => {
     try {
-        const userId = parseInt(req.params.userId);
-        const userData = req.body
-        const result = await userServices.deleteUserFromDb(userId, userData);
+        const userId = parseInt(req.params.userId)
+        const result = await userServices.deleteUserFromDb(userId);
         res.status(200).json({
             success: true,
             message: 'User deleted successfully!',

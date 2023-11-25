@@ -103,7 +103,11 @@ userSchema.post('save', function (doc, next) {
 // creating a custom method for existing user
 userSchema.methods.isUserExist = async function (userId: number) {
     const existingUser = await User.findOne({ userId });
-    return existingUser;
+    return !!existingUser;
+};
+
+userSchema.statics.deleteById = function (userId: number) {
+    return this.deleteOne({ userId })
 };
 
 const User = model<TUser, UserModel>('User', userSchema);
