@@ -1,26 +1,23 @@
 import { Model } from 'mongoose';
 
-interface TUserName {
+export type TUserName = {
   firstName: string;
   lastName: string;
-  // _id: boolean
 }
 
-interface TUserAddress {
+export type TUserAddress = {
   street: string;
   city: string;
   country: string;
-  // _id: boolean
 }
 
-interface TOrderProduct {
+export type TOrderProduct = {
   productName: string;
   price: number;
   quantity: number;
-  // _id: boolean
 }
 
-interface TUser {
+export type TUser = {
   userId: number;
   username: string;
   password: string;
@@ -30,7 +27,7 @@ interface TUser {
   isActive: boolean;
   hobbies: string[];
   address: TUserAddress;
-  orders?: TOrderProduct[] | undefined;
+  orders?: TOrderProduct[];
 }
 
 // creating method for existing user
@@ -39,6 +36,5 @@ export type UserMethods = {
   isUserExist(userId: number): Promise<TUser | null>;
 };
 
-type UserModel = Model<TUser, Record<string, never>, UserMethods>;
+export type UserModel = Model<TUser, Record<string, never>, UserMethods>;
 
-export { TUser, TUserName, TUserAddress, TOrderProduct, UserModel };

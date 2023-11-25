@@ -9,7 +9,8 @@ import {
 import config from '../config';
 import bcrypt from 'bcrypt';
 
-const userNameSchema = new Schema<TUserName>({
+// mongoose schema for user name
+const userNameSchema: Schema<TUserName> = new Schema({
     firstName: {
         type: String,
         required: [true, 'First name must be required'],
@@ -18,11 +19,11 @@ const userNameSchema = new Schema<TUserName>({
         type: String,
         required: [true, 'Last name must be required'],
     },
-    // _id: false
 
 });
 
-const userAddressSchema = new Schema<TUserAddress>({
+// mongoose schema for user address
+const userAddressSchema: Schema<TUserAddress> = new Schema({
     street: {
         type: String,
         required: [true, 'street must be required'],
@@ -35,10 +36,10 @@ const userAddressSchema = new Schema<TUserAddress>({
         type: String,
         required: [true, 'country must be required'],
     },
-    // _id: false
 });
 
-const orderSchema = new Schema<TOrderProduct>({
+// mongoose schema for user order
+const orderSchema: Schema<TOrderProduct> = new Schema({
     productName: {
         type: String,
     },
@@ -48,10 +49,10 @@ const orderSchema = new Schema<TOrderProduct>({
     quantity: {
         type: Number,
     },
-    // _id: false
 });
 
-const userSchema = new Schema<TUser, UserModel>({
+// mongoose schema for user
+const userSchema: Schema<TUser, UserModel> = new Schema({
     userId: {
         type: Number,
         required: [true, 'User ID must be required'],
@@ -106,10 +107,7 @@ userSchema.methods.isUserExist = async function (userId: number) {
     return !!existingUser;
 };
 
-userSchema.statics.deleteById = function (userId: number) {
-    return this.deleteOne({ userId })
-};
-
+// Schema model for user
 const User = model<TUser, UserModel>('User', userSchema);
 
 export default User;

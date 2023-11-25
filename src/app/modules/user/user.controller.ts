@@ -80,18 +80,18 @@ const updateUser = async (req: Request, res: Response) => {
         });
     }
 };
-const addOrderCollection = async (req: Request, res: Response) => {
+const addOrderCollection = async (req: Request, res: Response): Promise<void> => {
     try {
-        const userData = req.body;
-        const userId = parseInt(req.params.userId);
+        const { userId } = req.params;
+        const orderProduct = req.body;
 
-        // console.log(userData, userId);
-        const result = await userServices.updateUserInDb(userId, userData);
+        // console.log(orderProduct, userId);
+        await userServices.updateUserInDb(Number(userId), orderProduct);
         // console.log(result);
         res.status(200).json({
             success: true,
-            message: 'User updated successfully!',
-            data: result,
+            message: 'User created successfully!',
+            data: null,
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

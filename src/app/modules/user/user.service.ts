@@ -1,5 +1,5 @@
 import User from '../user.model';
-import { TUser } from './user.interface';
+import { TOrderProduct, TUser } from './user.interface';
 
 const createUserIntoDb = async (userData: TUser) => {
     // instance method
@@ -85,7 +85,7 @@ const deleteUserFromDb = async (id: number) => {
     }
 };
 
-const addOrderCollectionInDb = async (id: number, userData: TUser) => {
+const addOrderCollectionInDb = async (id: number, orderProduct: TOrderProduct) => {
     const userID = id;
     const user = new User({ userId: id });
 
@@ -95,50 +95,24 @@ const addOrderCollectionInDb = async (id: number, userData: TUser) => {
     } else {
         const result = await User.findOneAndUpdate(
             { userId: id },
-            { $push: { orders: userData } },
+            { $push: { orders: [orderProduct] } },
             { new: true, upsert: true }
         );
         return result;
+
+        // const user = await User.findOneAndUpdate({ userId: id })
+        // if (user) {
+        //     user.orders = [orderProduct]
+        //     await user.save()
+        //     return user
+        // } else {
+        //     const newUser = new User({ userId: id, orders: [orderProduct] });
+        //     const result = await newUser.save();
+        //     return result;
+        // }
     }
 };
 
-// const addOrderCollectionInDb = async (
-//     id: number,
-//     productName: string,
-//     price: number,
-//     quantity: number,
-//     userData: TUser
-// ): Promise<TUser | null> => {
-//     const result = await User.findOneAndUpdate(
-//         { userId: id },
-//         {
-//             $set: {
-//                 orders: {
-//                     $cond: {
-//                         if: { $isArray: "$orders" },
-//                         then: {
-//                             $concatArrays: [
-//                                 "$orders",
-//                                 [{
-//                                     productName, price, quantity
-//                                 }]
-//                             ]
-//                         },
-//                         else: [{
-//                             productName, price, quantity
-//                         }]
-//                     }
-//                 }
-//             }
-//         },
-//         {
-//             new: true, // Return the modified document
-//             runValidators: true // Run validators on update
-//         }
-//     );
-
-//     return result;
-// };
 
 const singleUserOrderDb = async (id: number) => {
     const userID = id;
