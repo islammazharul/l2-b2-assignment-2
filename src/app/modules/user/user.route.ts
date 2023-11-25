@@ -3,19 +3,20 @@ import { userController } from './user.controller';
 
 const router = express.Router();
 
-router.post("/create-user", userController.createUser)
+router.post('/create-user', userController.createUser);
 
-router.get("/", userController.getAllUser)
+router.get('/', userController.getAllUser);
 
-router.get("/:userId", userController.getSingleUser)
+router.get('/:userId', userController.getSingleUser);
 
-router.put("/:userId", userController.updateUser)
+router.get('/:userId/orders', userController.singleUserOrder);
 
-router.put("/:userId/orders", userController.addOrderCollection)
+router.get('/:userId/orders/total-price', userController.totalPrice);
 
-router.get("/:userId/orders", userController.totalPrice)
+router.put('/:userId', userController.updateUser);
 
-router.delete("/:userId", userController.deleteUser)
+router.put('/:userId/orders', userController.addOrderCollection);
 
+router.delete('/:userId', userController.deleteUser);
 
 export const userRout = router;
