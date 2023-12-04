@@ -12,7 +12,7 @@ app.use('/api/users', userRout);
 app.get('/', (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
-    message: "Welcome to the API of the first project..."
+    message: 'Welcome to the API of the first project...',
   });
 });
 

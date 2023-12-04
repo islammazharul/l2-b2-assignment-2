@@ -3,19 +3,19 @@ import { Model } from 'mongoose';
 export type TUserName = {
   firstName: string;
   lastName: string;
-}
+};
 
 export type TUserAddress = {
   street: string;
   city: string;
   country: string;
-}
+};
 
 export type TOrderProduct = {
   productName: string;
   price: number;
   quantity: number;
-}
+};
 
 export type TUser = {
   userId: number;
@@ -28,7 +28,7 @@ export type TUser = {
   hobbies: string[];
   address: TUserAddress;
   orders?: TOrderProduct[];
-}
+};
 
 // creating method for existing user
 export type UserMethods = {
@@ -37,4 +37,3 @@ export type UserMethods = {
 };
 
 export type UserModel = Model<TUser, Record<string, never>, UserMethods>;
-

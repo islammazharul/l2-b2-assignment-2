@@ -5,6 +5,7 @@ import userSchema from './user.validation';
 const createUser = async (req: Request, res: Response) => {
     try {
         const { user: userData } = req.body;
+        console.log(userData);
         // data validation using zod package
         const parseDataByZod = userSchema.parse(userData);
         const result = await userServices.createUserIntoDb(parseDataByZod);
@@ -80,18 +81,21 @@ const updateUser = async (req: Request, res: Response) => {
         });
     }
 };
-const addOrderCollection = async (req: Request, res: Response): Promise<void> => {
+const addOrderCollection = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
     try {
         const { userId } = req.params;
         const orderProduct = req.body;
 
         // console.log(orderProduct, userId);
-        await userServices.updateUserInDb(Number(userId), orderProduct);
+        const result = await userServices.updateUserInDb(Number(userId), orderProduct);
         // console.log(result);
         res.status(200).json({
             success: true,
-            message: 'User created successfully!',
-            data: null,
+            message: 'Order created successfully!',
+            data: result,
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -105,7 +109,7 @@ const addOrderCollection = async (req: Request, res: Response): Promise<void> =>
 
 const deleteUser = async (req: Request, res: Response) => {
     try {
-        const userId = parseInt(req.params.userId)
+        const userId = parseInt(req.params.userId);
         const result = await userServices.deleteUserFromDb(userId);
         res.status(200).json({
             success: true,

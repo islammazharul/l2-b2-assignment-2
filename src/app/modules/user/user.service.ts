@@ -28,8 +28,8 @@ const getAllUserFromDb = async () => {
 
 const getSingleUserFromDb = async (id: number) => {
     const userID = id;
-    const user = new User({ userId: id })
-    const doesExist = await user.isUserExist(userID)
+    const user = new User({ userId: id });
+    const doesExist = await user.isUserExist(userID);
     if (!doesExist) {
         throw new Error('User does not exist!');
     } else {
@@ -44,13 +44,12 @@ const getSingleUserFromDb = async (id: number) => {
                     email: 1,
                     isActive: 1,
                     hobbies: 1,
-                    address: 1
-                }
-            }
-        ])
+                    address: 1,
+                },
+            },
+        ]);
         return result;
     }
-
 };
 
 const updateUserInDb = async (
@@ -58,8 +57,8 @@ const updateUserInDb = async (
     updateData: TUser,
 ): Promise<TUser | null> => {
     const userID = id;
-    const user = new User({ userId: id })
-    const doesExist = await user.isUserExist(userID)
+    const user = new User({ userId: id });
+    const doesExist = await user.isUserExist(userID);
     if (!doesExist) {
         throw new Error('User does not exist!');
     } else {
@@ -69,12 +68,11 @@ const updateUserInDb = async (
         });
         return result;
     }
-
 };
 
 const deleteUserFromDb = async (id: number) => {
     const user = new User({ userId: id });
-    const userID = id
+    const userID = id;
 
     const doesExist = await user.isUserExist(userID);
     if (!doesExist) {
@@ -85,7 +83,10 @@ const deleteUserFromDb = async (id: number) => {
     }
 };
 
-const addOrderCollectionInDb = async (id: number, orderProduct: TOrderProduct) => {
+const addOrderCollectionInDb = async (
+    id: number,
+    orderProduct: TOrderProduct,
+) => {
     const userID = id;
     const user = new User({ userId: id });
 
@@ -95,29 +96,17 @@ const addOrderCollectionInDb = async (id: number, orderProduct: TOrderProduct) =
     } else {
         const result = await User.findOneAndUpdate(
             { userId: id },
-            { $push: { orders: [orderProduct] } },
+            { $push: { orders: orderProduct } },
             { new: true, upsert: true }
         );
         return result;
-
-        // const user = await User.findOneAndUpdate({ userId: id })
-        // if (user) {
-        //     user.orders = [orderProduct]
-        //     await user.save()
-        //     return user
-        // } else {
-        //     const newUser = new User({ userId: id, orders: [orderProduct] });
-        //     const result = await newUser.save();
-        //     return result;
-        // }
     }
 };
-
 
 const singleUserOrderDb = async (id: number) => {
     const userID = id;
     const user = new User({ userId: id });
-    const doesExist = await user.isUserExist(userID)
+    const doesExist = await user.isUserExist(userID);
     if (!doesExist) {
         throw new Error('User does not exist!');
     } else {
@@ -136,7 +125,7 @@ const singleUserOrderDb = async (id: number) => {
 const totalPriceOfOrder = async (id: number) => {
     const userID = id;
     const user = new User({ userId: id });
-    const doesExist = await user.isUserExist(userID)
+    const doesExist = await user.isUserExist(userID);
     if (doesExist) {
         const result = await User.aggregate([
             { $match: { userId: id } },
@@ -180,8 +169,7 @@ const totalPriceOfOrder = async (id: number) => {
             return errorResponse;
         }
     }
-}
-
+};
 
 export const userServices = {
     createUserIntoDb,
