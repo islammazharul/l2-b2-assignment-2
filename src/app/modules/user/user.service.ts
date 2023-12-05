@@ -1,7 +1,7 @@
 import User from '../user.model';
 import { TOrderProduct, TUser } from './user.interface';
 
-const createUserIntoDb = async (userData: TUser) => {
+const createUserIntoDb = async (userData: TUser): Promise<TUser | null> => {
   // instance method
   const user = new User(userData); /* create an instance */
   if (await user.isUserExist(userData.userId)) {
@@ -65,12 +65,12 @@ const updateUserInDb = async (
     const result = await User.findOneAndUpdate({ userId: id }, updateData, {
       new: true,
       runValidators: true,
-    });
+    }).select("-password").select("-orders");
     return result;
   }
 };
 
-const deleteUserFromDb = async (id: number) => {
+const deleteUserFromDb = async (id: number): Promise<TUser | null> => {
   const user = new User({ userId: id });
   const userID = id;
 
