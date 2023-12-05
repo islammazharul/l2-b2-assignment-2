@@ -1,18 +1,14 @@
 import { z } from 'zod';
 
-const isAlphabetic = (value: string) => {
-  const firstNameStr =
-    value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
-  return firstNameStr === value;
-};
+// const isAlphabetic = (value: string) => {
+//   const firstNameStr =
+//     value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+//   return firstNameStr === value;
+// };
 
 const userNameSchema = z.object({
-  firstName: z.string().min(1).refine(isAlphabetic, {
-    message: 'First name must contain only alphabetical characters',
-  }),
-  lastName: z.string().min(1).refine(isAlphabetic, {
-    message: 'Last name must contain only alphabetical characters',
-  }),
+  firstName: z.string().min(1, {message: 'First name must be required'}),
+  lastName: z.string().min(1, {message: 'Last name must be required'}),
 });
 
 const userAddressSchema = z.object({
